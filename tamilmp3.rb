@@ -1,16 +1,9 @@
-require 'rubygems'
-require 'mechanize'
-require 'pp'
-
-@agent = Mechanize.new { |agent|
-  agent.user_agent_alias = 'Mac Safari'
-}
-
-
-class SongDownload
+class SongSearcher
   def initialize(song_term)
     @song_term = song_term
-    @agent = Mechanize.new
+    @agent = Mechanize.new { |agent|
+      agent.user_agent_alias = 'Mac Safari'
+    }
   end
   
   def parse_songs (songs)
@@ -43,6 +36,11 @@ class SongDownload
   
   def search_and_print_songs
     songs = search_songs
+    
+    if songs.empty?
+      puts "Couldn't find any such song"
+    end
+    
     songs.each_with_index do |song,index|
       puts "#{index+1}. #{song[:name]}"
       puts "   Movie: #{song[:movie]}"
@@ -55,8 +53,6 @@ class SongDownload
 
   def fetch_page
     url = "http://thiraipaadal.com/search.php?txtselected=&lang=en&schMovieName=&schSongName=#{@song_term}&schSinger=&schLyrics=No&sbt=++Search++"
-    
-    puts "Hitting #{url}"
     
     page = @agent.get(url)
     return page
