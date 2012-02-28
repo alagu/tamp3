@@ -50,7 +50,7 @@ class SongDownloader
     
         File.open @song_name + '.mp3', 'w' do |io|          
           response.read_body do |fragment|
-            io.write << fragment
+            io.write fragment
             thread[:done] = (thread[:done] || 0) + fragment.length
             thread[:progress] = thread[:done].quo(length) * 100
           end
