@@ -70,7 +70,9 @@ class SongDownloader
     puts "Got song download link #{download_link}"
     
     thread = fetch_mp3(download_link)
-    puts "%.2f%%" % thread[:progress].to_f until thread.join 1
+    print "%.2f%%.." % thread[:progress].to_f until thread.join 1
     
+    puts " "
+    puts "#{@song_name} downloaded."
   end
 end
