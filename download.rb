@@ -1,12 +1,13 @@
 require 'rubygems'
-require 'rubygems'
 require 'mechanize'
 require 'pp'
-require './tamilmp3.rb'
+
+require File.expand_path(File.dirname(__FILE__)) + '/song_downloader.rb'
+require File.expand_path(File.dirname(__FILE__)) + '/song_searcher.rb'
 
 song_name = ARGV.join "+"
-song_search = SongSearch.new song_name
-songs = song_download.search_and_print_songs
+song_search = SongSearcher.new song_name
+songs = song_search.search_and_print_songs
 
 if songs.length > 0
   print "Which one to download (1-#{songs.length}) ? "
@@ -14,5 +15,5 @@ if songs.length > 0
   index   = index.chomp.to_i
   song_id = songs[index-1][:id]
   
-
+  song_downloader = SongDownloader.new song_id
 end
