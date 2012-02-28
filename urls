@@ -1,0 +1,3 @@
+query = ARGV.join("+")
+url = "http://thiraipaadal.com/search.php?txtselected=&lang=en&schMovieName=&schSongName=#{query}&schSinger=&schLyrics=No&sbt=++Search++"
+puts url
