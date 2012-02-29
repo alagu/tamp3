@@ -17,6 +17,6 @@ if songs.length > 0
   song_id       = selected_song[:id]
   song_name     = selected_song[:name]
   
-  song_downloader = SongDownloader.new(song_id, song_name)
+  song_downloader = SongDownloader.new(selected_song)
   song_downloader.download
 end
