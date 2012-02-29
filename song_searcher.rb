@@ -50,12 +50,19 @@ class SongSearcher
     
     return songs
   end
+  
+  def search_movies
+    url = "http://thiraipaadal.com/search.php?txtselected=&lang=en&schMovieName=#{@song_term}&schSongName=&schSinger=&schLyrics=No&sbt=++Search++"
+    
+    page = @agent.get(url)
+    return song_xpather(page)
+  end
 
-  def fetch_page
+  def search_songs
     url = "http://thiraipaadal.com/search.php?txtselected=&lang=en&schMovieName=&schSongName=#{@song_term}&schSinger=&schLyrics=No&sbt=++Search++"
     
     page = @agent.get(url)
-    return page
+    return song_xpather(page)
   end
   
 end
