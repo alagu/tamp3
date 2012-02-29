@@ -16,6 +16,7 @@ class SongSearcher
       end
       
       song_hash = {:movie => song.children[1].text,
+                   :movie_id => (song.children[1].children[0][:href].match %r|=(.*)&|)[1],
                    :name => song.children[2].text,
                    :singers => song.children[3].text,
                    :id => song.children[0].children[0][:value]
@@ -26,8 +27,7 @@ class SongSearcher
     songs_parsed
   end
   
-  def search_songs
-    page = fetch_page
+  def song_xpather(page)
     rowA = page.search("//tr[@class='rowA']")
     rowB = page.search("//tr[@class='rowB']")
     
