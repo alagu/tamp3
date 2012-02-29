@@ -3,6 +3,7 @@ require 'mechanize'
 require 'xmlsimple'
 require 'uri'
 require 'net/http'
+require 'yaml'
 
 class SongDownloader
   def initialize(song)
@@ -16,7 +17,17 @@ class SongDownloader
     @agent = Mechanize.new { |agent|
       agent.user_agent_alias = 'Mac Safari'
     }
-    @base_path = '/Users/alagu/Music/Music'
+
+    @base_path = load_base_path
+  end
+
+  def load_base_path
+    if File.exists? (ENV['HOME']+'/.tamp3rc') 
+      conf = YAML.load_file(ENV['HOME']+ '/.tamp3rc')
+      return conf['base_path']
+    else
+      return '.'
+    end
   end
   
   def get_playlist_id (player_content)
