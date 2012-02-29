@@ -5,18 +5,24 @@ require 'uri'
 require 'net/http'
 
 class SongDownloader
-  def initialize(song_id, song_name)
-    @song_id = song_id
-    @song_name = song_name
+  def initialize(song)
+    @song_id    = song[:id]
+    @song_name  = song[:name]
+    @movie_name = song[:movie]
+    @movie_id   = song[:movie_id]
+    @composer   = ''
+    @file_path  = ''
+
     @agent = Mechanize.new { |agent|
       agent.user_agent_alias = 'Mac Safari'
     }
+    @base_path = '/Users/alagu/Music/Music'
   end
   
   def get_playlist_id (player_content)
-    script    = player_content.search('//script')[2]
-    xml_line  = script.text.split("\n")[2]
-    playlist_id    = xml_line.split('"')[3]
+    script      = player_content.search('//script')[2]
+    xml_line    = script.text.split("\n")[2]
+    playlist_id = xml_line.split('"')[3]
   end
   
   def get_song_path (playlist_id)
@@ -27,19 +33,41 @@ class SongDownloader
   end
   
   def download_url (song_path)
-    song_name = song_path.split(' -- ')[1] + '.mp3'
-    song_name = URI.escape song_name
+    song_name   = song_path.split(' -- ')[1] + '.mp3'
+    song_name   = URI.escape song_name
     folder_name = song_path.split(' - ')[0]
     
     "http://thiraipaadal.com/tempdownloads/084097109105108/7779867369657666857783/#{folder_name}/#{song_name}"
   end
+  
+  def get_album_composer
+    url = "http://thiraipaadal.com/album.php?ALBID=#{@movie_id}&lang=en"
+    response = @agent.get(url)
+    response.links.each do |link|
+      if not link.href.index('md.php?MDID=').nil?
+        @composer = link.text
+      end
+    end
+    
+    puts "Got album composer - {@composer}"
+    return @composer
+  end  
+  
   
   def download_player_page
     player_url = "http://thiraipaadal.com/tpplayer.asp?sngs='#{@song_id}'&lang=en"
     @agent.get(player_url)
   end
   
+  def create_directory
+    path = "#{@base_path}/#{@composer}/#{@movie_name}/"
+    FileUtils.mkdir_p(path)
+    
+    path
+  end
+  
   def fetch_mp3 (url)
+    get_album_composer
     Thread.new do
       thread = Thread.current
       body = thread[:body] = []
@@ -47,8 +75,13 @@ class SongDownloader
       url = URI.parse url
       Net::HTTP.new(url.host, url.port).request_get(url.path) do |response|
         length = thread[:length] = response['Content-Length'].to_i
-    
-        File.open @song_name + '.mp3', 'w' do |io|          
+        
+        path      = create_directory
+        @file_path = path + @song_name + '.mp3'
+        
+        puts "Downloading to \"#{@file_path}\""
+
+        File.open (@file_path), 'w' do |io|          
           response.read_body do |fragment|
             io.write fragment
             thread[:done] = (thread[:done] || 0) + fragment.length
@@ -59,20 +92,32 @@ class SongDownloader
     end
   end
   
+  
+  def is_mac?
+    RUBY_PLATFORM.downcase.include?("darwin")
+  end
+  
+  def play(path)
+    if is_mac?
+      system('open "path"')
+    end
+  end
+  
   def download
     playlist_id = get_playlist_id(download_player_page)
     
     puts " "
-    puts "Got xml id (#{playlist_id})"    
+    puts "Got xml id"    
     song_path = get_song_path(playlist_id)
 
     download_link =  download_url(song_path)
-    puts "Got song download link #{download_link}"
+    puts "Got song download link. Starting download \n"
     
     thread = fetch_mp3(download_link)
     print "%.2f%%.." % thread[:progress].to_f until thread.join 1
     
-    puts " "
-    puts "#{@song_name} downloaded."
+    puts " \n"
+    puts "#{@song_name} downloaded. Playing.."
+    play(@path)
   end
 end
