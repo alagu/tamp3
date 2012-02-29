@@ -16,6 +16,7 @@ GEM
     net-http-persistent (2.5.2)
     nokogiri (1.5.0)
     ntlm-http (0.1.1)
+    ruby-mp3info (0.6.16)
     unf (0.0.4)
       unf_ext
     unf_ext (0.0.4)
@@ -27,4 +28,5 @@ PLATFORMS
 
 DEPENDENCIES
   mechanize
+  ruby-mp3info
   xml-simple
