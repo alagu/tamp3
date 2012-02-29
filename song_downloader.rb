@@ -97,9 +97,14 @@ class SongDownloader
     RUBY_PLATFORM.downcase.include?("darwin")
   end
   
-  def play(path)
+  def play_the_song
     if is_mac?
-      system('open "path"')
+      print "Should i play it? (Y/N)"
+      should_i_play = STDIN.gets 
+      if should_i_play.chomp == 'Y'
+        puts "Playing #{@path}"        
+        system('open "' + @path + '"')
+      end
     end
   end
   
@@ -117,7 +122,8 @@ class SongDownloader
     print "%.2f%%.." % thread[:progress].to_f until thread.join 1
     
     puts " \n"
-    puts "#{@song_name} downloaded. Playing.."
-    play(@path)
+    puts "#{@song_name} downloaded."
+    
+    play_the_song
   end
 end
