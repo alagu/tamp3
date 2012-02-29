@@ -127,11 +127,18 @@ class SongDownloader
     song_path = get_song_path(playlist_id)
 
     download_link =  download_url(song_path)
-    puts "Got song download link. Starting download \n"
+    puts "Got song download link. Starting download \n\n"
     
     thread = fetch_mp3(download_link)
+    i = 0
+
+    until thread.join 1
+      print "%.2f%%  " % thread[:progress].to_f 
+      print "\n" if ((i+=1)%7 == 0)
+      sleep 5 
+    end
     
-    puts " \n"
+    puts "\n -------- \n"
     puts "#{@song_name} downloaded."
     
     play_the_song
