@@ -2,7 +2,7 @@
 
 ## Background
 
-I download mp3 from Thiraipaadal, and my choice of songs are generally picky. I suddenly remember a song and then I want to listen it. Youtube audio quality sucks. I had to search for a song, find it in Thiraipaadal, inspect the http request and download it.
+I usually download mp3 from Thiraipaadal and I go by picking up songs rather than whole movies. I suddenly remember a song which I've been humming and then I want to listen it. Youtube audio quality sucks. For Thiraipaadal, I have to search for a song, find it in Thiraipaadal, inspect the http request and download it.
 
 I wanted it to be more easy. Like search in commandline and download right there. That is why I built this.
 
