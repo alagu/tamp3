@@ -49,7 +49,7 @@ class SongDownloader
       end
     end
     
-    puts "Got album composer - {@composer}"
+    puts "Got album composer - #{@composer}"
     return @composer
   end  
   
@@ -68,6 +68,10 @@ class SongDownloader
   
   def fetch_mp3 (url)
     get_album_composer
+    path      = create_directory
+    @file_path = path + @song_name + '.mp3'
+    puts "Downloading to \"#{@file_path}\""
+    
     Thread.new do
       thread = Thread.current
       body = thread[:body] = []
@@ -76,10 +80,6 @@ class SongDownloader
       Net::HTTP.new(url.host, url.port).request_get(url.path) do |response|
         length = thread[:length] = response['Content-Length'].to_i
         
-        path      = create_directory
-        @file_path = path + @song_name + '.mp3'
-        
-        puts "Downloading to \"#{@file_path}\""
 
         File.open (@file_path), 'w' do |io|          
           response.read_body do |fragment|
@@ -102,8 +102,8 @@ class SongDownloader
       print "Should i play it? (Y/N)"
       should_i_play = STDIN.gets 
       if should_i_play.chomp == 'Y'
-        puts "Playing #{@path}"        
-        system('open "' + @path + '"')
+        puts "Playing #{@file_path}"        
+        system('open "' + @file_path + '"')
       end
     end
   end
@@ -119,7 +119,6 @@ class SongDownloader
     puts "Got song download link. Starting download \n"
     
     thread = fetch_mp3(download_link)
-    print "%.2f%%.." % thread[:progress].to_f until thread.join 1
     
     puts " \n"
     puts "#{@song_name} downloaded."
