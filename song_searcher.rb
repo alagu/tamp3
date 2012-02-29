@@ -35,10 +35,10 @@ class SongSearcher
   end
   
   def search_and_print_songs
-    songs = search_songs
+    songs = search_songs + search_movies
     
     if songs.empty?
-      puts "Couldn't find any such song"
+      puts "No such songs/movies found"
     end
     
     songs.each_with_index do |song,index|
