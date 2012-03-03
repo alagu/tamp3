@@ -4,6 +4,7 @@ require 'xmlsimple'
 require 'uri'
 require 'net/http'
 require 'yaml'
+require 'progressbar'
 
 class SongDownloader
   def initialize(song)
@@ -131,12 +132,14 @@ class SongDownloader
     
     thread = fetch_mp3(download_link)
     i = 0
-
+    
+    progress          = ProgressBar.new("  Downloaded", 100)
+    progress.bar_mark = '*'
+    
     until thread.join 1
-      print "%.2f%%  " % thread[:progress].to_f 
-      print "\n" if ((i+=1)%7 == 0)
-      sleep 5 
+      progress.set thread[:progress].to_i
     end
+    progress.finish
     
     puts "\n -------- \n"
     puts "#{@song_name} downloaded."
