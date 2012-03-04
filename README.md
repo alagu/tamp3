@@ -1,4 +1,6 @@
+<center>
 [![tamp3](https://img.skitch.com/20120304-xkxqnuwucfe1fnu4bxmpj34tn5.jpg)](https://skitch.com/alagu/8g6rm/download.rb)
+</center>
 
 ## Background
 
