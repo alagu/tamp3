@@ -1,4 +1,4 @@
-[![tamp3](https://img.skitch.com/20120228-aq2t38hqr5sp7s1sai62er6ck.jpg)](https://skitch.com/alagu/8f1xi/1-alagu-alagus-mac-bin-tamp3-zsh)
+[![tamp3](https://img.skitch.com/20120304-xkxqnuwucfe1fnu4bxmpj34tn5.jpg)](https://skitch.com/alagu/8g6rm/download.rb)
 
 ## Background
 
