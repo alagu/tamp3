@@ -1,15 +1,29 @@
 require 'rubygems'
 require 'mechanize'
 require 'pp'
+require 'ruby-debug'
 
 require File.expand_path(File.dirname(__FILE__)) + '/song_downloader.rb'
 require File.expand_path(File.dirname(__FILE__)) + '/song_searcher.rb'
 
 song_name = ARGV.join "+"
-song_search = SongSearcher.new song_name
-songs = song_search.search_and_print_songs
+
+  def self.search(song_name,options={})
+    song_search = SongSearcher.new song_name, options
+    songs = song_search.search_and_print_songs
+  end
+
+songs = search(song_name)
 
 if songs.length > 0
+  print "Filter based on \n 1. Movie name \n 2. Singer name \n 3.if sufficient with result please press enter\n"
+  filter = STDIN.gets
+  if filter.chomp.to_i == 1
+    search(song_name,{:movie_name=>song_name})
+  elsif filter.chomp.to_i == 2
+    search(song_name,{:singer_name=>song_name})
+  end 
+  
   print "Which one to download (1-#{songs.length}) ? "
   index         = STDIN.gets 
   index         = index.chomp.to_i
