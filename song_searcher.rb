@@ -1,6 +1,7 @@
 class SongSearcher
-  def initialize(song_term)
+  def initialize(song_term,options={})
     @song_term = song_term
+    @options = options
     @agent = Mechanize.new { |agent|
       agent.user_agent_alias = 'Mac Safari'
     }
@@ -35,10 +36,15 @@ class SongSearcher
   end
   
   def search_and_print_songs
-    songs = search_songs + search_movies
-    
+    if @options[:movie_name]
+      songs = search_movies
+    elsif @options[:singer_name]
+      songs = search_singers
+    else
+      songs = search_songs + search_movies
+    end
     if songs.empty?
-      puts "No such songs/movies found"
+      puts "No such songs/movies/singers found"
     end
     
     songs.each_with_index do |song,index|
@@ -64,6 +70,13 @@ class SongSearcher
     page = @agent.get(url)
     return song_xpather(page)
   end
+
+  def search_singers
+    url = "http://thiraipaadal.com/search.php?txtselected=&lang=en&schMovieName=&schSongName=&schSinger=#{@song_term}&schLyrics=No&sbt=++Search++"
+    puts url
+    page = @agent.get(url)
+    return song_xpather(page)
+  end 
   
 end
 
