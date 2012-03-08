@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'mechanize'
 require 'pp'
-require 'ruby-debug'
 
 require File.expand_path(File.dirname(__FILE__)) + '/song_downloader.rb'
 require File.expand_path(File.dirname(__FILE__)) + '/song_searcher.rb'
