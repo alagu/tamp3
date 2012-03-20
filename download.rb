@@ -14,18 +14,35 @@ song_name = ARGV.join "+"
 
 songs = search(song_name)
 
+def self.get_input_again (songs)
+  if songs.length == 0
+    return
+  end
+  print "Which one to download [1-#{songs.length}]? "
+  index = STDIN.gets 
+  index.chomp.to_i
+end
+
 if songs.length > 0
-  print "Filter based on \n 1. Movie name \n 2. Singer name \n 3.if sufficient with result please press enter\n"
-  filter = STDIN.gets
-  if filter.chomp.to_i == 1
-    search(song_name,{:movie_name=>song_name})
-  elsif filter.chomp.to_i == 2
-    search(song_name,{:singer_name=>song_name})
-  end 
   
-  print "Which one to download (1-#{songs.length}) ? "
+  puts "Filters: m=movie; s=singer"
+  print "Which one to download [1-#{songs.length},m,s]? "
   index         = STDIN.gets 
-  index         = index.chomp.to_i
+  index         = index.chomp
+  
+  if index == "m"
+    songs = search(song_name,{:movie_name=>song_name})
+    index = get_input_again songs
+  elsif index == "s"
+    songs = search(song_name,{:singer_name=>song_name})
+    index = get_input_again songs
+  else
+    index = index.to_i
+  end    
+
+  if songs.length == 0 
+    exit
+  end
   selected_song = songs[index-1]
   song_id       = selected_song[:id]
   song_name     = selected_song[:name]

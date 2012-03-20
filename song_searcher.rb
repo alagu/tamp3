@@ -65,15 +65,13 @@ class SongSearcher
   end
 
   def search_songs
-    url = "http://thiraipaadal.com/search.php?txtselected=&lang=en&schMovieName=&schSongName=#{@song_term}&schSinger=&schLyrics=No&sbt=++Search++"
-    
+    url = "http://thiraipaadal.com/search.php?txtselected=&lang=en&schMovieName=&schSongName=#{@song_term}&schSinger=&schLyrics=No&sbt=++Search++"    
     page = @agent.get(url)
     return song_xpather(page)
   end
 
   def search_singers
     url = "http://thiraipaadal.com/search.php?txtselected=&lang=en&schMovieName=&schSongName=&schSinger=#{@song_term}&schLyrics=No&sbt=++Search++"
-    puts url
     page = @agent.get(url)
     return song_xpather(page)
   end 
