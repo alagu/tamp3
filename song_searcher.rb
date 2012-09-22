@@ -41,7 +41,7 @@ class SongSearcher
     elsif @options[:singer_name]
       songs = search_singers
     else
-      songs = search_songs + search_movies
+      songs = search_songs + search_movies + search_singers
     end
     if songs.empty?
       puts "No such songs/movies/singers found"
