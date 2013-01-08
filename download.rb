@@ -45,8 +45,8 @@ if songs.length > 0
   end
 
   if song_list.length > 0
-    song_list.each do |count, index|
-      puts "Downloading (#{count + 1} of #{song_list.length})"
+    song_list.each_with_index do |index, count|
+      puts "Downloading (#{count} of #{song_list.length}) Item #{index} "
       selected_song = songs[index-1]
       song_id       = selected_song[:id]
       song_name     = selected_song[:name]

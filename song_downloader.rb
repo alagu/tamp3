@@ -114,7 +114,8 @@ class SongDownloader
       print "Should i play it? (Y/N)"
       should_i_play = STDIN.gets 
       if should_i_play.chomp == 'Y'
-        puts "Playing #{@file_path}"        
+        puts "Playing #{@file_path}"
+        puts 'open "' + @file_path + '"'        
         system('open "' + @file_path + '"')
       end
     end
